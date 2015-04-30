@@ -185,9 +185,13 @@ def show_image(form, c):
 
     # Read image
     path = form['path'].value
-    with open(IMAGEPATH+path, 'rb') as content_file:
-       content = content_file.read()
-
+    referer = os.getenv('HTTP_REFERER')
+    if referer:
+        with open(IMAGEPATH+path, 'rb') as content_file:
+           content = content_file.read()
+    else:
+        with open(IMAGEPATH+'/error.png', 'rb') as content_file:
+           content = content_file.read()
     # Send header and image content
     hdr = "Content-Type: image/jpeg\nContent-Length: %d\n\n" % len(content)
     print hdr+content
